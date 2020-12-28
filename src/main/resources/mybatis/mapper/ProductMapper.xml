@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyw.info_submit.dao.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.cyw.info_submit.entity.Product">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pname" jdbcType="VARCHAR" property="pname" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="quality" jdbcType="VARCHAR" property="quality" />
+    <result column="factory" jdbcType="VARCHAR" property="factory" />
+    <result column="pnumber" jdbcType="VARCHAR" property="pnumber" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, pname, price, quality, factory, pnumber, createtime, updatetime
+  </sql>
+
+  <!--根据id批量获取物品信息-->
+  <select id="listByPids" parameterType="java.util.List" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from product
+    where id in
+    <foreach collection ="idList" item="id" separator ="," open="(" close=")">
+      #{id, jdbcType=BIGINT}
+    </foreach>
+  </select>
+
+  <!--复合条件查询物品数据列表-->
+  <select id="findByQuery" parameterType="com.cyw.info_submit.entity.Product" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from product
+    <where>
+      <if test="pname != null">
+        and pname = #{pname,jdbcType=VARCHAR}
+      </if>
+      <if test="factory != null">
+        and factory = #{factory,jdbcType=VARCHAR}
+      </if>
+      <if test="pnumber != null">
+        and pnumber = #{pnumber,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <!--根据主键查询物品信息-->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cyw.info_submit.entity.Product">
+    insert into product (id, pname, quality, 
+      factory, pnumber)
+    values (#{id,jdbcType=BIGINT}, #{pname,jdbcType=VARCHAR}, #{quality,jdbcType=VARCHAR}, 
+      #{factory,jdbcType=VARCHAR}, #{pnumber,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cyw.info_submit.entity.Product">
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="pname != null">
+        pname,
+      </if>
+      <if test="quality != null">
+        quality,
+      </if>
+      <if test="factory != null">
+        factory,
+      </if>
+      <if test="pnumber != null">
+        pnumber,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="pname != null">
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="quality != null">
+        #{quality,jdbcType=VARCHAR},
+      </if>
+      <if test="factory != null">
+        #{factory,jdbcType=VARCHAR},
+      </if>
+      <if test="pnumber != null">
+        #{pnumber,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cyw.info_submit.entity.Product">
+    update product
+    <set>
+      <if test="pname != null">
+        pname = #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="quality != null">
+        quality = #{quality,jdbcType=VARCHAR},
+      </if>
+      <if test="factory != null">
+        factory = #{factory,jdbcType=VARCHAR},
+      </if>
+      <if test="pnumber != null">
+        pnumber = #{pnumber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cyw.info_submit.entity.Product">
+    update product
+    set pname = #{pname,jdbcType=VARCHAR},
+      quality = #{quality,jdbcType=VARCHAR},
+      factory = #{factory,jdbcType=VARCHAR},
+      pnumber = #{pnumber,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

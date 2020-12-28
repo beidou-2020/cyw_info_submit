@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyw.info_submit.dao.BackpackMapper">
+  <resultMap id="BaseResultMap" type="com.cyw.info_submit.entity.Backpack">
+    <id column="tuid" jdbcType="BIGINT" property="tuid" />
+    <id column="tpid" jdbcType="BIGINT" property="tpid" />
+    <result column="tpcount" jdbcType="BIGINT" property="tpcount" />
+    <result column="ptotal" jdbcType="DECIMAL" property="ptotal" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tuid, tpid, tpcount, ptotal, createtime, updatetime
+  </sql>
+
+  <!--根据联合主键查询记录-->
+  <select id="selectByPrimaryKey" parameterType="com.cyw.info_submit.entity.BackpackKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from backpack
+    where tuid = #{tuid,jdbcType=BIGINT}
+      and tpid = #{tpid,jdbcType=BIGINT}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="com.cyw.info_submit.entity.BackpackKey">
+    delete from backpack
+    where tuid = #{tuid,jdbcType=BIGINT}
+      and tpid = #{tpid,jdbcType=BIGINT}
+  </delete>
+
+
+  <insert id="insert" parameterType="com.cyw.info_submit.entity.Backpack">
+    insert into backpack (tuid, tpid, tpcount, 
+      ptotal, createtime, updatetime
+      )
+    values (#{tuid,jdbcType=BIGINT}, #{tpid,jdbcType=BIGINT}, #{tpcount,jdbcType=BIGINT}, 
+      #{ptotal,jdbcType=DECIMAL}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <!--加入一个物品到我的背包中-->
+  <insert id="insertSelective" parameterType="com.cyw.info_submit.entity.Backpack">
+    insert into backpack
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tuid != null">
+        tuid,
+      </if>
+      <if test="tpid != null">
+        tpid,
+      </if>
+      <if test="tpcount != null">
+        tpcount,
+      </if>
+      <if test="ptotal != null">
+        ptotal,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="updatetime != null">
+        updatetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tuid != null">
+        #{tuid,jdbcType=BIGINT},
+      </if>
+      <if test="tpid != null">
+        #{tpid,jdbcType=BIGINT},
+      </if>
+      <if test="tpcount != null">
+        #{tpcount,jdbcType=BIGINT},
+      </if>
+      <if test="ptotal != null">
+        #{ptotal,jdbcType=DECIMAL},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <!--根据主键更新背包中的记录(合并数据)-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.cyw.info_submit.entity.Backpack">
+    update backpack
+    <set>
+      <if test="tpcount != null">
+        tpcount = #{tpcount,jdbcType=BIGINT},
+      </if>
+      <if test="ptotal != null">
+        ptotal = #{ptotal,jdbcType=DECIMAL},
+      </if>
+      <if test="updatetime != null">
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where tuid = #{tuid,jdbcType=BIGINT}
+      and tpid = #{tpid,jdbcType=BIGINT}
+  </update>
+
+  <select id="listByUid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from backpack
+    where tuid = #{uid,jdbcType=BIGINT}
+  </select>
+
+</mapper>

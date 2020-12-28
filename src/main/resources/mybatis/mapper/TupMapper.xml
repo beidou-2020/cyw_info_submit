@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyw.info_submit.dao.TupMapper">
+  <resultMap id="BaseResultMap" type="com.cyw.info_submit.entity.Tup">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tpid" jdbcType="BIGINT" property="tpid" />
+    <result column="tuid" jdbcType="BIGINT" property="tuid" />
+    <result column="username" jdbcType="VARCHAR" property="username"/>
+    <result column="pname" jdbcType="VARCHAR" property="pname"/>
+    <result column="submit_number" jdbcType="VARCHAR" property="submitNumber" />
+    <result column="tpcount" jdbcType="BIGINT" property="tpcount" />
+    <result column="ptotal" jdbcType="DECIMAL" property="ptotal" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tpid, tuid, username, pname, submit_number, tpcount, ptotal, status, createtime, updatetime
+  </sql>
+
+  <!--根据主键获取物品提交记录-->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tup
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from tup
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <!--保存一条提交记录-->
+  <insert id="insertSelective" parameterType="com.cyw.info_submit.entity.Tup">
+    insert into tup
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tpid != null">
+        tpid,
+      </if>
+      <if test="tuid != null">
+        tuid,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="pname != null">
+        pname,
+      </if>
+      <if test="submitNumber != null">
+        submit_number,
+      </if>
+      <if test="tpcount != null">
+        tpcount,
+      </if>
+      <if test="ptotal != null">
+        ptotal,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tpid != null">
+        #{tpid,jdbcType=BIGINT},
+      </if>
+      <if test="tuid != null">
+        #{tuid,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="pname != null">
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="submitNumber != null">
+        #{submitNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tpcount != null">
+        #{tpcount,jdbcType=DECIMAL},
+      </if>
+      <if test="ptotal != null">
+        #{ptotal,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+
+  <!--获取我的订单列表-->
+  <select id="myOrders" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tup
+    where tuid = #{uid,jdbcType=BIGINT}
+  </select>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.cyw.info_submit.entity.Tup">
+    update tup
+    <set>
+      <if test="tpid != null">
+        tpid = #{tpid,jdbcType=BIGINT},
+      </if>
+      <if test="tuid != null">
+        tuid = #{tuid,jdbcType=BIGINT},
+      </if>
+      <if test="tpcount != null">
+        tpcount = #{tpcount,jdbcType=BIGINT},
+      </if>
+      <if test="ptotal != null">
+        ptotal = #{ptotal,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cyw.info_submit.entity.Tup">
+    update tup
+    set tpid = #{tpid,jdbcType=BIGINT},
+      tuid = #{tuid,jdbcType=BIGINT},
+      tpcount = #{tpcount,jdbcType=BIGINT},
+      ptotal = #{ptotal,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
