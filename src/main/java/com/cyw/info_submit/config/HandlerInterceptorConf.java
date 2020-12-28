@@ -17,8 +17,6 @@ public class HandlerInterceptorConf implements WebMvcConfigurer {
     private static final List<String> EXCLUDE_PATH =
             Arrays.asList("/css/**", "/js/**", "/image/**", "/", "/login");
 
-    // private static final List<String>
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //注册自定义拦截器
